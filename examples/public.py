@@ -2,23 +2,29 @@
 
 # Python
 import logging
+import os
 
 # LogMeIn API
-from lmiapi import LogMeInAPI
+from lmiapi import LogMeInPublicAPI
 
 logging.basicConfig(level=logging.DEBUG,
                     format='%(levelname)-8s %(name)s:%(message)s')
 
+# Read authentication settings from environment variables.
+company_id = int(os.environ.get('LMIAPI_COMPANY_ID', '1234567890'))
+psk = os.environ.get('LMIAPI_PSK', 'abcde12345ABCDE12345')
+auth_file = os.environ.get('LMIAPI_AUTH_FILE', 'public_auth.txt')
+
 # Option 1: Pass credentials as a dictionary.
-auth = {'companyId': 123467890, 'psk': 'abcde12345ABCDE12345'}
-api = LogMeInAPI(auth)
+auth = {'companyId': company_id, 'psk': psk}
+api = LogMeInPublicAPI(auth)
 
 # Option 2: Pass the content of the credentials file provided by LogMeIn.
-auth = file('example_auth.txt').read()
-api = LogMeInAPI(auth)
+auth = file(auth_file).read()
+api = LogMeInPublicAPI(auth)
 
 # Option 3: Pass in the credentials file name directly.
-api = LogMeInAPI('example_auth.txt')
+api = LogMeInPublicAPI(auth_file)
 
 # Check that credentials work to authenticate.
 print api.authentication()

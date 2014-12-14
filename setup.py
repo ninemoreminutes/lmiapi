@@ -8,12 +8,12 @@ from setuptools import setup
 
 setup(
     name='lmiapi',
-    version='0.1',
+    version='0.2.0',
     author='Nine More Minutes, Inc.',
     author_email='support@ninemoreminutes.com',
-    description='Basic Python interface to the LogMeIn Central REST API.',
-    long_description=open(os.path.join(os.path.dirname(__file__), 'README'),
-                          'rb').read().decode('utf-8'),
+    description='Python interface to the LogMeIn Central API.',
+    long_description=open(os.path.join(os.path.dirname(__file__),
+        'README.rst')).read().decode('utf-8'),
     license='BSD',
     keywords='logmein api requests rest',
     url='https://projects.ninemoreminutes.com/projects/lmiapi/',
@@ -21,10 +21,11 @@ setup(
     include_package_data=False,
     zip_safe=False,
     install_requires=[
+        'beautifulsoup4',
         'requests>=2.0',
     ],
     setup_requires=[],
-    #tests_require=tests_require,
+    tests_require=['pytest'],
     #test_suite='test_suite.TestSuite',
     classifiers=[
         'Development Status :: 3 - Alpha',

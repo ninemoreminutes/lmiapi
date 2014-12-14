@@ -1,2 +1,2 @@
-from .v1 import *
+from .public_v1 import *
 from .central import *

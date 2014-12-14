@@ -3,17 +3,18 @@ import json
 import logging
 import os
 import urlparse
+import warnings
 
 # Requests
 import requests
 from requests.structures import CaseInsensitiveDict
 
-__all__ = ['LogMeInAPI']
+__all__ = ['LogMeInPublicAPI', 'LogMeInAPI']
 
-logger = logging.getLogger('lmiapi.v1')
+logger = logging.getLogger('lmiapi.public_v1')
 
 
-class LogMeInAPI(object):
+class LogMeInPublicAPI(object):
 
     API_ROOT = 'https://secure.logmein.com/public-api/v1/'
 
@@ -127,3 +128,11 @@ class LogMeInAPI(object):
             fields = self.system_fields
         return self._get_or_create_report('/inventory/system/reports',
                                           host_ids, fields)
+
+
+class LogMeInAPI(LogMeInPublicAPI):
+
+    def __init__(self, *args, **kwargs):
+        warnings.warn('The LogMeInAPI class is deprecated; use '
+                      'LogMeInPublicAPI instead.', DeprecationWarning)
+        super(LogMeInAPI, self).__init__(*args, **kwargs)
