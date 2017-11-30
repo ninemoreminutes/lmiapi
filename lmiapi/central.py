@@ -1,10 +1,10 @@
 # Python
 import json
 import logging
-import os
 import re
 import urllib
 import urlparse
+import warnings
 import webbrowser
 
 # Requests
@@ -18,11 +18,14 @@ __all__ = ['LogMeInCentralAPI']
 logger = logging.getLogger('lmiapi.central')
 
 
-class LogMeInCentralAPI(object):
+class LogMeInCentralAPI(object):  # pragma: no cover
 
     API_ROOT = 'https://secure.logmein.com/api/'
 
     def __init__(self, email, password):
+        warnings.warn('The LogMeInCentralAPI class is no longer maintained or '
+                      'supported; use LogMeInPublicAPI instead.',
+                      DeprecationWarning)
         self.email = email
         self.password = password
         self.session = requests.Session()
@@ -37,7 +40,7 @@ class LogMeInCentralAPI(object):
         if response.status_code == 401 and self.login():
             response = self.session.post(url, data=data, headers=headers)
         response.raise_for_status()
-        #logger.debug('POST %s -> %d', url, response.status_code)
+        logger.debug('POST %s -> %d', url, response.status_code)
         return response.json()
 
     def _update_current_profile_id(self, soup):

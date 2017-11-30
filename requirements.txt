@@ -1,3 +1,0 @@
-# PIP requirements for development/build/test environment.
-beautifulsoup4
-requests>=2.2

@@ -1,0 +1,9 @@
+# PIP requirements for development/build/test environment.
+
+pyreadline
+ipython
+flake8
+pycodestyle
+pytest
+pytest-cov
+pytest-flake8

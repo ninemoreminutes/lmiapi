@@ -1,84 +1,27 @@
 # Python
-import json
 import logging
-import os
-import urlparse
 import warnings
 
-# Requests
-import requests
-from requests.structures import CaseInsensitiveDict
+# LogMeIn API
+from .public import LogMeInPublicAPIBase
 
-__all__ = ['LogMeInPublicAPI', 'LogMeInAPI']
+__all__ = ['LogMeInPublicAPIv1']
 
 logger = logging.getLogger('lmiapi.public_v1')
 
 
-class LogMeInPublicAPI(object):
+class LogMeInPublicAPIv1(LogMeInPublicAPIBase):
+    '''
+    https://secure.logmein.com/welcome/documentation/EN/pdf/LogMeInCentralPublicAPIReference.pdf
+    '''
 
     API_ROOT = 'https://secure.logmein.com/public-api/v1/'
 
     def __init__(self, creds):
-        self.creds = self._check_creds(creds)
-        self.session = requests.Session()
-        self.session.headers.update({'Accept': 'application/JSON'})
-        self.session.headers.update({'Authorization': json.dumps(self.creds)})
-
-    def _check_creds(self, creds):
-        d = CaseInsensitiveDict()
-        if isinstance(creds, dict):
-            d.update(creds)
-        elif isinstance(creds, basestring):
-            if os.path.exists(creds):
-                creds = file(creds, 'r').read()
-            for line in creds.splitlines():
-                if ':' in line:
-                    k,v = line.split(':', 1)
-                    d[k.strip()] = v.strip()
-        else:
-            raise TypeError('unsupported type for credentials data')
-        if 'companyId' not in d and 'CID' in d:
-            d['companyId'] = d['CID']
-        if 'companyId' in d and not 'psk' in d:
-            raise ValueError('psk is required when companyId is provided')
-        elif 'psk' in d and not 'companyId' in d:
-            raise ValueError('companyId is required when psk is provided')
-        elif 'companyId' in d and 'psk' in d:
-            return {
-                'companyId': int(d['companyId']),
-                'psk': str(d['psk']),
-            }
-        elif 'loginSessionId' in d and not 'profileId' in d:
-            raise ValueError('profileId is required when loginSessionId is '
-                             'provided')
-        elif 'profileId' in d and not 'loginSessionId' in d:
-            raise ValueError('loginSessionId is required when profileId is '
-                             'provided')
-        elif 'loginSessionId' in d and 'profileId' in d:
-            return {
-                'loginSessionId': str(d['loginSessionId']),
-                'profileId': int(d['profileId']),
-            }
-        else:
-            raise ValueError('either companyId+psk or '
-                             'loginSessionId+profileId must be provided')
-
-    def _get(self, path):
-        url = '%s%s' % (self.API_ROOT, path.lstrip('/'))
-        response = self.session.get(url)
-        #logger.debug('GET %s -> %d', url, response.status_code)
-        return response.json()
-
-    def _post(self, path, data):
-        url = '%s%s' % (self.API_ROOT, path.lstrip('/'))
-        headers = {'Content-Type': 'application/JSON'}
-        data = json.dumps(data)
-        response = self.session.post(url, data=data, headers=headers)
-        #logger.debug('POST %s -> %d', url, response.status_code)
-        return response.json()
-
-    def authentication(self):
-        return self._get('/authentication')
+        warnings.warn('The LogMeInPublicAPIv1 class is no longer the current '
+                      'version; use LogMeInPublicAPIv2 instead.',
+                      DeprecationWarning)
+        super(LogMeInPublicAPIv1, self).__init__(creds)
 
     def hosts(self):
         d = self._get('/hosts')
@@ -86,7 +29,7 @@ class LogMeInPublicAPI(object):
             self._cached_hosts = d
         return getattr(self, '_cached_hosts', d)
 
-    def _get_or_create_report(self, path, host_ids=None, fields=None):
+    def _get_or_create_report(self, path, host_ids=None, fields=None):  # pragma: no cover
         d = self._get(path)
         if not d or not d.get('token', None) or not d.get('expires', None):
             if host_ids is None:
@@ -113,7 +56,6 @@ class LogMeInPublicAPI(object):
     def hardware_fields(self):
         return self._get('/inventory/hardware/fields')
 
-
     def hardware_report(self, host_ids=None, fields=None):
         if fields is None:
             fields = self.hardware_fields
@@ -128,11 +70,3 @@ class LogMeInPublicAPI(object):
             fields = self.system_fields
         return self._get_or_create_report('/inventory/system/reports',
                                           host_ids, fields)
-
-
-class LogMeInAPI(LogMeInPublicAPI):
-
-    def __init__(self, *args, **kwargs):
-        warnings.warn('The LogMeInAPI class is deprecated; use '
-                      'LogMeInPublicAPI instead.', DeprecationWarning)
-        super(LogMeInAPI, self).__init__(*args, **kwargs)

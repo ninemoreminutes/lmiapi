@@ -1,0 +1,4 @@
+# PIP requirements for production/installation.
+
+beautifulsoup4
+requests>=2.2
