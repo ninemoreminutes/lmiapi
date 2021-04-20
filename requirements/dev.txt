@@ -4,34 +4,63 @@
 #
 #    pip-compile --output-file requirements/dev.txt requirements/dev.in
 #
-appnope==0.1.0            # via ipython
-attrs==17.3.0             # via pytest
-backports.shutil-get-terminal-size==1.0.0  # via ipython
-configparser==3.5.0       # via flake8
-coverage==4.4.2           # via pytest-cov
-decorator==4.1.2          # via ipython, traitlets
-enum34==1.1.6             # via flake8, traitlets
+attrs==17.3.0
+    # via pytest
+coverage==4.4.2
+    # via pytest-cov
+decorator==4.1.2
+    # via
+    #   ipython
+    #   traitlets
 flake8==3.5.0
-funcsigs==1.0.2           # via pytest
-ipython-genutils==0.2.0   # via traitlets
+    # via
+    #   -r dev.in
+    #   pytest-flake8
+ipython-genutils==0.2.0
+    # via traitlets
 ipython==5.5.0
-mccabe==0.6.1             # via flake8
-pathlib2==2.3.0           # via ipython, pickleshare
-pexpect==4.3.0            # via ipython
-pickleshare==0.7.4        # via ipython
-pluggy==0.6.0             # via pytest
-prompt-toolkit==1.0.15    # via ipython
-ptyprocess==0.5.2         # via pexpect
-py==1.5.2                 # via pytest
+    # via -r dev.in
+mccabe==0.6.1
+    # via flake8
+pexpect==4.3.0
+    # via ipython
+pickleshare==0.7.4
+    # via ipython
+pluggy==0.6.0
+    # via pytest
+prompt-toolkit==1.0.15
+    # via ipython
+ptyprocess==0.5.2
+    # via pexpect
+py==1.10.0
+    # via pytest
 pycodestyle==2.3.1
-pyflakes==1.6.0           # via flake8
-pygments==2.2.0           # via ipython
+    # via
+    #   -r dev.in
+    #   flake8
+pyflakes==1.6.0
+    # via flake8
+pygments==2.2.0
+    # via ipython
 pyreadline==2.1
+    # via -r dev.in
 pytest-cov==2.5.1
+    # via -r dev.in
 pytest-flake8==0.9.1
+    # via -r dev.in
 pytest==3.3.0
-scandir==1.6              # via pathlib2
-simplegeneric==0.8.1      # via ipython
-six==1.11.0               # via pathlib2, prompt-toolkit, pytest, traitlets
-traitlets==4.3.2          # via ipython
-wcwidth==0.1.7            # via prompt-toolkit
+    # via
+    #   -r dev.in
+    #   pytest-cov
+    #   pytest-flake8
+simplegeneric==0.8.1
+    # via ipython
+six==1.11.0
+    # via
+    #   prompt-toolkit
+    #   pytest
+    #   traitlets
+traitlets==4.3.2
+    # via ipython
+wcwidth==0.1.7
+    # via prompt-toolkit
